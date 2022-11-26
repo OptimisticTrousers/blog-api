@@ -2,7 +2,10 @@ import express, { Application, Request, Response, NextFunction } from "express";
 import mongoose, { ConnectOptions } from "mongoose";
 import logger from "morgan";
 import cors from "cors";
-import blogRouter from "./routes/blog";
+import postRouter from "./routes/post";
+import { config } from "dotenv";
+
+config();
 
 const app: Application = express();
 
@@ -21,6 +24,6 @@ app.use(express.static("public"));
 app.use(cors());
 
 // routes
-app.use("/blogs", blogRouter);
+app.use("/posts", postRouter);
 
 app.listen(process.env.PORT, () => console.log("Server running"));
