@@ -2,6 +2,7 @@ import express, { Application, Request, Response, NextFunction } from "express";
 import mongoose, { ConnectOptions } from "mongoose";
 import logger from "morgan";
 import cors from "cors";
+import blogRouter from "./routes/blog";
 
 const app: Application = express();
 
@@ -20,6 +21,6 @@ app.use(express.static("public"));
 app.use(cors());
 
 // routes
-app.use("/blogs");
+app.use("/blogs", blogRouter);
 
 app.listen(process.env.PORT, () => console.log("Server running"));
