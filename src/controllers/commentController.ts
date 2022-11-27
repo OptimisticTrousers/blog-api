@@ -6,7 +6,7 @@ import { body, validationResult } from "express-validator";
 const comment_create_post = [
   // Validate and sanitize data
   body("name", "Please enter a title").trim().isLength({ min: 1 }),
-  body("content", "Please enter content").trim().isLength({ min: 1 }),
+  body("contentHtml", "Please enter content").trim().isLength({ min: 1 }),
   // Process request after validation and sanitization
   (req: Request, res: Response, next: NextFunction) => {
     // Extract the validation errors from a request
@@ -15,7 +15,7 @@ const comment_create_post = [
     // Create a Post object with trimmed data
     const newComment = new Comment({
       name: req.body.name,
-      content: req.body.content,
+      contentHtml: req.body.contentHtml,
     });
 
     if (!errors.isEmpty()) {
@@ -25,7 +25,7 @@ const comment_create_post = [
       newComment
         .save()
         .then((comment) => {
-          res.json({ comment, message: "Created comment" });
+          res.json({ comment });
         })
         .catch((err) => {
           next(err);

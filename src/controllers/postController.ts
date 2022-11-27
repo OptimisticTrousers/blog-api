@@ -8,7 +8,7 @@ const post_list = (req: Request, res: Response, next: NextFunction) => {
   Post.find()
     .exec()
     .then((posts) => {
-      res.json({ posts, message: "Returned all posts" });
+      res.json({ posts });
     })
     .catch((err) => {
       next(err);
@@ -19,7 +19,7 @@ const post_list = (req: Request, res: Response, next: NextFunction) => {
 const post_create_post = [
   // Validate and sanitize data
   body("title", "Please enter a title").trim().isLength({ min: 1 }),
-  body("content", "Please enter content").trim().isLength({ min: 1 }),
+  body("contentHtml", "Please enter content").trim().isLength({ min: 1 }),
   body(
     "published",
     "Please decide if you want to publish this point"
@@ -32,7 +32,7 @@ const post_create_post = [
     // Create a Post object with trimmed data
     const newPost = new Post({
       title: req.body.title,
-      content: req.body.content,
+      contentHtml: req.body.contentHtml,
       published: req.body.published,
     });
 
@@ -43,7 +43,7 @@ const post_create_post = [
       newPost
         .save()
         .then((post) => {
-          res.json({ post, message: "Created post" });
+          res.json({ post });
         })
         .catch((err) => {
           next(err);
@@ -59,7 +59,7 @@ const post_detail = (req: Request, res: Response, next: NextFunction) => {
     Comment.find({ postId: req.params.postId }).exec(),
   ])
     .then(([posts, comments]) => {
-      res.json({ posts, comments, message: "Returned post and its comments" });
+      res.json({ posts, comments });
     })
     .catch((err) => {
       next(err);
@@ -70,7 +70,7 @@ const post_detail = (req: Request, res: Response, next: NextFunction) => {
 const post_update_put = [
   // Validate and sanitize data
   body("title", "Please enter a title").trim().isLength({ min: 1 }),
-  body("content", "Please enter content").trim().isLength({ min: 1 }),
+  body("contentHtml", "Please enter content").trim().isLength({ min: 1 }),
   body(
     "published",
     "Please decide if you want to publish this point"
@@ -83,7 +83,7 @@ const post_update_put = [
     // Create a Post object with trimmed data
     const newPost = new Post({
       title: req.body.title,
-      content: req.body.content,
+      contentHtml: req.body.contentHtml,
       published: req.body.published,
     });
 
@@ -94,7 +94,7 @@ const post_update_put = [
       Post.findByIdAndUpdate(req.params.postId, newPost)
         .exec()
         .then((post) => {
-          res.json({ post, message: "Updated post" });
+          res.json({ post });
         })
         .catch((err) => {
           next(err);
@@ -114,7 +114,6 @@ const post_update_delete = (
     .then((post) => {
       res.json({
         post,
-        message: "Deleted post",
       });
     })
     .catch((err) => {
