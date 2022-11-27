@@ -1,7 +1,7 @@
 {
   "name": "blog-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "A blog API for my website",
   "main": "index.js",
   "scripts": {
     "start": "node dist/app.js",
