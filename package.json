@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "A blog API for my website",
   "main": "index.js",
+  "engines": {
+    "node": "18.10.0"
+  },
   "scripts": {
     "start": "node dist/app.js",
     "dev": "nodemon src/app.ts",
