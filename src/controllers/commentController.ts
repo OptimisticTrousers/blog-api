@@ -5,7 +5,8 @@ import { body, validationResult } from "express-validator";
 // Handle comment create on POST
 const comment_create_post = [
   // Validate and sanitize data
-  body("name", "Please enter a title").trim().isLength({ min: 1 }),
+  body("name", "Please enter a name").trim().isLength({ min: 1 }),
+  body("email", "Please enter an email").trim().isEmail(),
   body("contentHtml", "Please enter content").trim().isLength({ min: 1 }),
   // Process request after validation and sanitization
   (req: Request, res: Response, next: NextFunction) => {
