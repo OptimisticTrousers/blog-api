@@ -13,6 +13,8 @@ import createError from "http-errors";
 import helmet from "helmet";
 import compression from "compression";
 import postRouter from "./routes/post";
+import categoryRouter from "./routes/category";
+import tagRouter from "./routes/tag";
 
 config();
 
@@ -35,7 +37,9 @@ app.use(express.static("public"));
 app.use(cors());
 
 // routes
-app.use("/posts", postRouter);
+app.use("/api/posts", postRouter);
+app.use("/api/category", categoryRouter);
+app.use("/api/tags", tagRouter);
 
 // catch 404 and forward to error handler
 app.use((req: Request, res: Response, next: NextFunction) => {
