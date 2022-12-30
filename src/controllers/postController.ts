@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import Comment from "../models/comment";
 import { body, validationResult } from "express-validator";
 import Post from "../models/post";
 
@@ -16,14 +15,15 @@ const post_list = (req: Request, res: Response, next: NextFunction) => {
 };
 
 // Handle post create on POST
-const post_create_post = [
+const post_create = [
   // Validate and sanitize data
-  body("title", "Please enter a title").trim().isLength({ min: 1 }),
+  body("title", "Please enter a title").trim().isLength({ min: 1 }).escape(),
   body("contentHtml", "Please enter content").trim().isLength({ min: 1 }),
-  body(
-    "published",
-    "Please decide if you want to publish this point"
-  ).toBoolean(),
+  body("published", "Please decide if you want to publish this post")
+    .toBoolean()
+    .exists(),
+  body("tags", "Please add tags").isArray({ min: 1 }).exists(),
+  body("category", "Please add a category").isArray({ min: 1 }).exists(),
   // Process request after validation and sanitization
   (req: Request, res: Response, next: NextFunction) => {
     // Extract the validation errors from a request
@@ -34,6 +34,8 @@ const post_create_post = [
       title: req.body.title,
       contentHtml: req.body.contentHtml,
       published: req.body.published,
+      category: req.body.category,
+      tags: req.body.tags,
     });
 
     if (!errors.isEmpty()) {
@@ -54,12 +56,10 @@ const post_create_post = [
 
 // Return JSON for a specific post
 const post_detail = (req: Request, res: Response, next: NextFunction) => {
-  Promise.all([
-    Post.findById(req.params.postId).exec(),
-    Comment.find({ postId: req.params.postId }).exec(),
-  ])
-    .then(([posts, comments]) => {
-      res.json({ posts, comments });
+  Post.findById(req.params.postId)
+    .exec()
+    .then((post) => {
+      res.json({ post });
     })
     .catch((err) => {
       next(err);
@@ -67,14 +67,15 @@ const post_detail = (req: Request, res: Response, next: NextFunction) => {
 };
 
 // Handle post update on PUT
-const post_update_put = [
+const post_update = [
   // Validate and sanitize data
-  body("title", "Please enter a title").trim().isLength({ min: 1 }),
+  body("title", "Please enter a title").trim().isLength({ min: 1 }).escape(),
   body("contentHtml", "Please enter content").trim().isLength({ min: 1 }),
-  body(
-    "published",
-    "Please decide if you want to publish this point"
-  ).toBoolean(),
+  body("published", "Please decide if you want to publish this post")
+    .toBoolean()
+    .exists(),
+  body("tags", "Please add tags").isArray({ min: 1 }).exists(),
+  body("category", "Please add a category").isArray({ min: 1 }).exists(),
   // Process request after validation and sanitization
   (req: Request, res: Response, next: NextFunction) => {
     // Extract the validation errors from a request
@@ -85,6 +86,8 @@ const post_update_put = [
       title: req.body.title,
       contentHtml: req.body.contentHtml,
       published: req.body.published,
+      category: req.body.category,
+      tags: req.body.tags,
     });
 
     if (!errors.isEmpty()) {
@@ -104,12 +107,8 @@ const post_update_put = [
 ];
 
 // Handle post delete on DELETE
-const post_update_delete = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  Post.findByIdAndRemove(req.body.postId)
+const post_delete = (req: Request, res: Response, next: NextFunction) => {
+  Post.findByIdAndRemove(req.params.postId)
     .exec()
     .then((post) => {
       res.json({
@@ -117,14 +116,14 @@ const post_update_delete = (
       });
     })
     .catch((err) => {
-      next(err);
+      next(err)
     });
 };
 
 export default {
   post_list,
-  post_create_post,
+  post_create,
   post_detail,
-  post_update_put,
-  post_update_delete,
+  post_update,
+  post_delete,
 };
