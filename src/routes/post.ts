@@ -13,7 +13,7 @@ router
 router
   .route("/:postId")
   .get(post_controller.post_detail)
-  .put(post_controller.post_update)
+  .put(upload.single("image"), post_controller.post_update)
   .delete(post_controller.post_delete);
 
 export default router;
