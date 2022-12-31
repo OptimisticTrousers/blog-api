@@ -10,9 +10,10 @@ import logger from "morgan";
 import cors from "cors";
 import { config } from "dotenv";
 import createError from "http-errors";
-import helmet from "helmet";
+import helmet, { crossOriginEmbedderPolicy } from "helmet";
 import compression from "compression";
 import routes from "./routes/routes";
+import multer from "multer";
 
 config();
 
@@ -26,13 +27,22 @@ mongoose.connect(mongoDB!, {
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "mongo connection error"));
 
-app.use(helmet());
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+  })
+);
 app.use(compression());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public"));
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  })
+);
 
 app.use("/api", routes);
 
@@ -48,7 +58,7 @@ app.use(<ErrorRequestHandler>((err, req, res, next) => {
   res.locals.error = req.app.get("env") === "development" ? err : {};
 
   // render the error page
-  console.log(err)
+  console.log(err);
   res.status(err.status || 500).send(err);
 }));
 
