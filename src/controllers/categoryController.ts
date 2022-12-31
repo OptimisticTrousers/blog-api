@@ -65,10 +65,7 @@ const category_detail = (req: Request, res: Response, next: NextFunction) => {
 // Handle category update on PUT
 const category_update = [
   // Validate and sanitize data
-  body("name", "Please enter a category name")
-    .trim()
-    .isLength({ min: 1 })
-    .escape(),
+  body("name", "Please enter a category name").trim().isLength({ min: 1 }).escape(),
   // Process request after validation and sanitization
   (req: Request, res: Response, next: NextFunction) => {
     // Extract the validation errors from a request

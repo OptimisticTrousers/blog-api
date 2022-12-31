@@ -37,6 +37,8 @@ const post_create = [
       category: req.body.category,
       tags: req.body.tags,
       image: req.file,
+      createdAt: req.body.createdAt,
+      updatedAt: req.body.updatedAt
     });
 
     if (!errors.isEmpty()) {
@@ -90,6 +92,8 @@ const post_update = [
       category: req.body.category,
       tags: req.body.tags,
       ...(req.file && { image: req.file }),
+      createdAt: req.body.createdAt,
+      updatedAt: req.body.updatedAt
     });
 
     if (!errors.isEmpty()) {
