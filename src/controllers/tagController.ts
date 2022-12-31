@@ -48,7 +48,7 @@ const tag_create = [
 // Return JSON for a specific tag
 const tag_detail = (req: Request, res: Response, next: NextFunction) => {
   Promise.all([
-    Tag.findById(req.params.tagId).exec(),
+    Tag.findById(req.params.tagId),
     Post.find({ "tags._id": req.params.tagId }),
   ])
     .then(([tag, posts]) => {
@@ -69,9 +69,9 @@ const tag_update = [
     const errors = validationResult(req);
 
     // Create a Tag object with trimmed data
-    const newTag = new Tag({
+    const newTag = {
       name: req.body.name,
-    });
+    };
 
     if (!errors.isEmpty()) {
       // There are errors so return an error
@@ -83,6 +83,7 @@ const tag_update = [
           res.json({ tag });
         })
         .catch((err) => {
+          console.log(err);
           next(err);
         });
     }

@@ -8,7 +8,7 @@ const router: Router = Router();
 router
   .route("/")
   .get(post_controller.post_list)
-  .post(upload.single("post-image"), post_controller.post_create);
+  .post(upload.single("image"), post_controller.post_create);
 
 router
   .route("/:postId")

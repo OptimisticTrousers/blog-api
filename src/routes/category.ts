@@ -9,7 +9,7 @@ router
   .post(category_controller.category_create);
 
 router
-  .route(":categoryId")
+  .route("/:categoryId")
   .get(category_controller.category_detail)
   .put(category_controller.category_update)
   .delete(category_controller.category_delete);

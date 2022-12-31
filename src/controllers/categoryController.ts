@@ -51,7 +51,7 @@ const category_create = [
 // Return JSON for a specific category
 const category_detail = (req: Request, res: Response, next: NextFunction) => {
   Promise.all([
-    Category.findById(req.params.categoryId).exec(),
+    Category.findById(req.params.categoryId),
     Post.find({ "category._id": req.params.categoryId }),
   ])
     .then(([category, posts]) => {
@@ -75,9 +75,9 @@ const category_update = [
     const errors = validationResult(req);
 
     // Create a Category object with trimmed data
-    const newCategory = new Category({
+    const newCategory = {
       name: req.body.name,
-    });
+    };
 
     if (!errors.isEmpty()) {
       // There are errors so return an error
