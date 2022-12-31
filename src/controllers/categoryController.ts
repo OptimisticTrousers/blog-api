@@ -7,8 +7,8 @@ import Post from "../models/post";
 const category_list = (req: Request, res: Response, next: NextFunction) => {
   Category.find()
     .exec()
-    .then((category) => {
-      res.json({ category });
+    .then((categories) => {
+      res.json({ categories });
     })
     .catch((err) => {
       next(err);
@@ -65,7 +65,10 @@ const category_detail = (req: Request, res: Response, next: NextFunction) => {
 // Handle category update on PUT
 const category_update = [
   // Validate and sanitize data
-  body("name", "Please enter a category name").trim().isLength({ min: 1 }).escape(),
+  body("name", "Please enter a category name")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
   // Process request after validation and sanitization
   (req: Request, res: Response, next: NextFunction) => {
     // Extract the validation errors from a request

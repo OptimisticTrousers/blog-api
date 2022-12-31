@@ -7,8 +7,8 @@ import Post from "../models/post";
 const tag_list = (req: Request, res: Response, next: NextFunction) => {
   Tag.find()
     .exec()
-    .then((tag) => {
-      res.json({ tag });
+    .then((tags) => {
+      res.json({ tags });
     })
     .catch((err) => {
       next(err);
