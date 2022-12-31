@@ -36,6 +36,7 @@ const post_create = [
       published: req.body.published,
       category: req.body.category,
       tags: req.body.tags,
+      image: req.file,
     });
 
     if (!errors.isEmpty()) {
@@ -88,6 +89,7 @@ const post_update = [
       published: req.body.published,
       category: req.body.category,
       tags: req.body.tags,
+      ...(req.file && { image: req.file }),
     });
 
     if (!errors.isEmpty()) {
@@ -116,7 +118,7 @@ const post_delete = (req: Request, res: Response, next: NextFunction) => {
       });
     })
     .catch((err) => {
-      next(err)
+      next(err);
     });
 };
 
