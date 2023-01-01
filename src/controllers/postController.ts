@@ -5,6 +5,8 @@ import Post from "../models/post";
 // Return JSON of all posts
 const post_list = (req: Request, res: Response, next: NextFunction) => {
   Post.find()
+    .populate("category")
+    .populate("tags")
     .exec()
     .then((posts) => {
       res.json({ posts });
@@ -69,6 +71,8 @@ const post_create = [
 // Return JSON for a specific post
 const post_detail = (req: Request, res: Response, next: NextFunction) => {
   Post.findById(req.params.postId)
+    .populate("category")
+    .populate("tags")
     .exec()
     .then((post) => {
       res.json({ post });
