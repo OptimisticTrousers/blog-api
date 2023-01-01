@@ -29,6 +29,8 @@ const post_create = [
     // Extract the validation errors from a request
     const errors = validationResult(req);
 
+    console.log(req.body)
+
     // Create a Post object with trimmed data
     const newPost = new Post({
       title: req.body.title,
@@ -53,6 +55,7 @@ const post_create = [
           res.json({ post });
         })
         .catch((err) => {
+          console.log(err)
           next(err);
         });
     }

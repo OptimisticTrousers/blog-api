@@ -52,7 +52,7 @@ const category_create = [
 const category_detail = (req: Request, res: Response, next: NextFunction) => {
   Promise.all([
     Category.findById(req.params.categoryId),
-    Post.find({ "category._id": req.params.categoryId }),
+    Post.find({ category: req.params.categoryId }),
   ])
     .then(([category, posts]) => {
       res.json({ category, posts });
