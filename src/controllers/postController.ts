@@ -23,13 +23,18 @@ const post_create = [
     .toBoolean()
     .exists(),
   body("tags", "Please add tags").exists(),
+  body("caption", "Please enter a caption")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
   body("category", "Please add a category").exists(),
+  body("createdAt", "Please add a createdAt date").exists(),
+  body("updatedAt", "Please add an updatedAt date").exists(),
+
   // Process request after validation and sanitization
   (req: Request, res: Response, next: NextFunction) => {
     // Extract the validation errors from a request
     const errors = validationResult(req);
-
-    console.log(req.body)
 
     // Create a Post object with trimmed data
     const newPost = new Post({
@@ -46,7 +51,7 @@ const post_create = [
 
     if (!errors.isEmpty()) {
       // There are errors so return an error
-      console.log(errors)
+      console.log(errors);
       res.sendStatus(502);
     } else {
       newPost
@@ -55,7 +60,6 @@ const post_create = [
           res.json({ post });
         })
         .catch((err) => {
-          console.log(err)
           next(err);
         });
     }
@@ -84,12 +88,19 @@ const post_update = [
     .exists(),
   body("tags", "Please add tags").exists(),
   body("category", "Please add a category").exists(),
+  body("caption", "Please enter a caption")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("category", "Please add a category").exists(),
+  body("createdAt", "Please add a createdAt date").exists(),
+  body("updatedAt", "Please add an updatedAt date").exists(),
   // Process request after validation and sanitization
   (req: Request, res: Response, next: NextFunction) => {
     // Extract the validation errors from a request
     const errors = validationResult(req);
 
-    console.log(req.body)
+    console.log(req.body);
     // Create a Post object with trimmed data
     const newPost = {
       title: req.body.title,
@@ -105,7 +116,7 @@ const post_update = [
 
     if (!errors.isEmpty()) {
       // There are errors so return an error
-      console.log(errors)
+      console.log(errors);
       res.sendStatus(502);
     } else {
       Post.findByIdAndUpdate(req.params.postId, newPost)
