@@ -16,6 +16,10 @@ import routes from "./routes/routes";
 import fs from "fs";
 import path from "path";
 import multer from "multer";
+import session from "express-session";
+import cookieParser from "cookie-parser";
+import passport from "passport";
+import passportConfig from "./passportConfig";
 
 config();
 
@@ -37,7 +41,7 @@ app.use(
 app.use(compression());
 app.use(logger("dev"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 try {
   fs.mkdirSync(path.join(__dirname, "/public"));
 } catch (error: any) {
@@ -47,9 +51,19 @@ app.use(express.static("public"));
 app.use(
   cors({
     origin: "http://localhost:5173",
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
   })
 );
+
+app.use(session({
+  secret: "secretcode",
+  resave: true,
+  saveUninitialized: true
+}))
+app.use(cookieParser("secretcode"))
+passportConfig(passport);
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.use("/api", routes);
 
@@ -65,6 +79,7 @@ app.use(<ErrorRequestHandler>((err, req, res, next) => {
   res.locals.error = req.app.get("env") === "development" ? err : {};
 
   // render the error page
+  console.log(err)
   res.status(err.status || 500).send(err);
 }));
 
