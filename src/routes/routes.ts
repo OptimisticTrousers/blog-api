@@ -24,26 +24,25 @@ const router = express.Router();
 // });
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
-    if(err) {
-      return next(err)
+    if (err) {
+      return next(err);
     }
-    if(!user) res.send("No User Exists")
+    if (!user) res.send("No User Exists");
     else {
       req.logIn(user, (err) => {
-        if(err) {
-          return next(err)
+        if (err) {
+          return next(err);
         }
-        res.send("Successfully Authenticated")
-        console.log(req.user)
-      })
+        res.send("Successfully Authenticated");
+        console.log(req.user);
+      });
     }
-
-  })(req, res, next)
-})
+  })(req, res, next);
+});
 router.get("/user", (req, res) => {
-  console.log(req.user)
-  res.send(req.user)
-})
+  console.log(req.user);
+  res.json({ user: req.user ? req.user : null });
+});
 router.use("/posts", postRouter);
 router.use("/categories", categoryRouter);
 router.use("/tags", tagRouter);
