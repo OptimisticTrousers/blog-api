@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { body, validationResult } from "express-validator";
-import { s3Uploadv3 } from "../config/s3";
+import { s3Deletev3, s3Uploadv3 } from "../config/s3";
 import Post from "../models/post";
 
 // Return JSON of all posts
@@ -58,7 +58,7 @@ const post_create = [
     } else {
       console.log(req.file);
       if (req.file) {
-        const results = await s3Uploadv3(req.file);
+        await s3Uploadv3(req.file);
       }
       newPost
         .save()
@@ -126,11 +126,14 @@ const post_update = [
       res.sendStatus(502);
     } else {
       if (req.file) {
-        const results = await s3Uploadv3(req.file);
+        await s3Uploadv3(req.file);
       }
       Post.findByIdAndUpdate(req.params.postId, newPost)
         .exec()
-        .then((post) => {
+        .then(async (post) => {
+          if (post && post.image) {
+            await s3Deletev3(post.image);
+          }
           res.json({ post });
         })
         .catch((err) => {
@@ -145,6 +148,9 @@ const post_delete = (req: Request, res: Response, next: NextFunction) => {
   Post.findByIdAndRemove(req.params.postId)
     .exec()
     .then(async (post) => {
+      if (post && post.image) {
+        await s3Deletev3(post.image);
+      }
       res.json({
         post,
       });
