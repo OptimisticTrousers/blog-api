@@ -49,7 +49,7 @@ const tag_create = [
 const tag_detail = (req: Request, res: Response, next: NextFunction) => {
   Promise.all([
     Tag.findById(req.params.tagId),
-    Post.find({ "tags": req.params.tagId }),
+    Post.find({ tags: req.params.tagId }),
   ])
     .then(([tag, posts]) => {
       res.json({ tag, posts });
@@ -83,7 +83,6 @@ const tag_update = [
           res.json({ tag });
         })
         .catch((err) => {
-          console.log(err);
           next(err);
         });
     }

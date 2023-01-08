@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { body, validationResult } from "express-validator";
+import { s3Uploadv3 } from "../config/s3";
 import Post from "../models/post";
 
 // Return JSON of all posts
@@ -34,7 +35,7 @@ const post_create = [
   body("updatedAt", "Please add an updatedAt date").exists(),
 
   // Process request after validation and sanitization
-  (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     // Extract the validation errors from a request
     const errors = validationResult(req);
 
@@ -53,9 +54,12 @@ const post_create = [
 
     if (!errors.isEmpty()) {
       // There are errors so return an error
-      console.log(errors);
       res.sendStatus(502);
     } else {
+      console.log(req.file);
+      if (req.file) {
+        const results = await s3Uploadv3(req.file);
+      }
       newPost
         .save()
         .then((post) => {
@@ -100,11 +104,10 @@ const post_update = [
   body("createdAt", "Please add a createdAt date").exists(),
   body("updatedAt", "Please add an updatedAt date").exists(),
   // Process request after validation and sanitization
-  (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     // Extract the validation errors from a request
     const errors = validationResult(req);
 
-    console.log(req.body);
     // Create a Post object with trimmed data
     const newPost = {
       title: req.body.title,
@@ -120,16 +123,17 @@ const post_update = [
 
     if (!errors.isEmpty()) {
       // There are errors so return an error
-      console.log(errors);
       res.sendStatus(502);
     } else {
+      if (req.file) {
+        const results = await s3Uploadv3(req.file);
+      }
       Post.findByIdAndUpdate(req.params.postId, newPost)
         .exec()
         .then((post) => {
           res.json({ post });
         })
         .catch((err) => {
-          console.log(err);
           next(err);
         });
     }
@@ -140,7 +144,7 @@ const post_update = [
 const post_delete = (req: Request, res: Response, next: NextFunction) => {
   Post.findByIdAndRemove(req.params.postId)
     .exec()
-    .then((post) => {
+    .then(async (post) => {
       res.json({
         post,
       });
