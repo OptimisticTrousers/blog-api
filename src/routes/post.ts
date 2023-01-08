@@ -1,7 +1,12 @@
 import { Router } from "express";
 import post_controller from "../controllers/postController";
-import multer from "multer";
-const upload = multer({ dest: "public/" });
+import multer, { FileFilterCallback } from "multer";
+
+const storage = multer.memoryStorage();
+
+const upload = multer({
+  storage,
+});
 
 const router: Router = Router();
 
