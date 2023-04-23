@@ -5,7 +5,7 @@ import Post from "../models/post";
 
 // Return JSON of all posts
 const post_list = (req: Request, res: Response, next: NextFunction) => {
-  Post.find()
+  Post.find({})
     .populate("category")
     .populate("tags")
     .exec()
@@ -13,6 +13,7 @@ const post_list = (req: Request, res: Response, next: NextFunction) => {
       res.json({ posts });
     })
     .catch((err) => {
+      console.log(err)
       next(err);
     });
 };
