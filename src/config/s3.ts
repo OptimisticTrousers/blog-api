@@ -13,7 +13,7 @@ export const s3Uploadv3 = async (file: any) => {
 
     const param = {
       Bucket: process.env.S3_BUCKET,
-      Key: `uploads/${file.originalname}`,
+      Key: `blog/${file.originalname}`,
       ContentType: file.mimetype,
       Body: fs.createReadStream(file.path),
     };
