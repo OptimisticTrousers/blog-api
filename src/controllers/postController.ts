@@ -92,10 +92,6 @@ const post_update = [
     .exists(),
   body("tags", "Please add tags").exists(),
   body("category", "Please add a category").exists(),
-  body("caption", "Please enter a caption")
-    .trim()
-    .isLength({ min: 1 })
-    .escape(),
   body("category", "Please add a category").exists(),
   body("createdAt", "Please add a createdAt date").exists(),
   body("updatedAt", "Please add an updatedAt date").exists(),
