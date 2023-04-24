@@ -13,7 +13,7 @@ const post_list = (req: Request, res: Response, next: NextFunction) => {
       res.json({ posts });
     })
     .catch((err) => {
-      console.log(err)
+      console.log(err);
       next(err);
     });
 };
@@ -22,7 +22,7 @@ const post_list = (req: Request, res: Response, next: NextFunction) => {
 const post_create = [
   // Validate and sanitize data
   body("title", "Please enter a title").trim().isLength({ min: 1 }).escape(),
-  body("contentHtml", "Please enter content").trim().isLength({ min: 1 }),
+  body("contentHtml", "Please enter content").isLength({ min: 1 }),
   body("published", "Please decide if you want to publish this post")
     .toBoolean()
     .exists(),
@@ -87,7 +87,7 @@ const post_detail = (req: Request, res: Response, next: NextFunction) => {
 const post_update = [
   // Validate and sanitize data
   body("title", "Please enter a title").trim().isLength({ min: 1 }).escape(),
-  body("contentHtml", "Please enter content").trim().isLength({ min: 1 }),
+  body("contentHtml", "Please enter content").isLength({ min: 1 }),
   body("published", "Please decide if you want to publish this post")
     .toBoolean()
     .exists(),
