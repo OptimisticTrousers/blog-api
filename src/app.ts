@@ -31,6 +31,7 @@ app.use(
       "http://localhost:5173",
       "https://tonyisern.com",
       "http://localhost:3000",
+      "https://optimistic-blog-cms.netlify.app/",
     ],
     credentials: true,
   })
