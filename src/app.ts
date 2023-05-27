@@ -12,6 +12,7 @@ import passportConfig from "./config/passport";
 import notFoundHandler from "./middlewares/notFoundHandler";
 import errorHandler from "./middlewares/errorHandler";
 import databaseConfig from "./config/db";
+import accessControlAllow from "./middlewares/accessControlAllow";
 
 config();
 
@@ -31,7 +32,7 @@ app.use(
       "http://localhost:5173",
       "https://tonyisern.com",
       "http://localhost:3000",
-      "https://optimistic-blog-cms.netlify.app/",
+      "https://optimistic-blog-cms.netlify.app",
     ],
     credentials: true,
   })
@@ -49,7 +50,7 @@ passportConfig(passport);
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use("/api", routes);
+app.use("/api", accessControlAllow, routes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
