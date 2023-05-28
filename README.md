@@ -15,7 +15,7 @@ Beyond that, other learning outcomes were:
 
 - Using TypeScript with Express
 - Making RESTful APIs
-- Using JWT tokens to authenticate myself
+- Using Passport.js with the Local Strategy using sessions and cookies to authenticate myself
 
 
 ## Features
@@ -40,7 +40,7 @@ Beyond that, other learning outcomes were:
 
 ## Areas for Improvement
 
-* [ ] Display a home page instead of a blank page
+* [ ] Write an endpoint that allows me to search for posts
 
 ## Known Bugs
 
