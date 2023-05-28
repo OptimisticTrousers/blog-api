@@ -10,7 +10,9 @@ const accessControlAllow = (
 ) => {
   res.setHeader(
     "Access-Control-Allow-Origin",
-    "https://optimistic-blog-cms.netlify.app"
+    process.env.NODE_ENV === "production"
+      ? "https://optimistic-blog-cms.netlify.app"
+      : "http://localhost:5173"
   );
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Access-Control-Allow-Methods", "POST,PUT,GET,OPTIONS");
